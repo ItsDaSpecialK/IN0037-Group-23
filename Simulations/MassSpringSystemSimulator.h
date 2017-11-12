@@ -1,7 +1,10 @@
 #ifndef MASSSPRINGSYSTEMSIMULATOR_h
 #define MASSSPRINGSYSTEMSIMULATOR_h
 #include "Simulator.h"
-
+#include "Point.h"
+#include "Spring.h"
+#include "Spring.h"
+#include "DemoScene.h"
 // Do Not Change
 #define EULER 0
 #define LEAPFROG 1
@@ -9,9 +12,10 @@
 // Do Not Change
 
 
+
 class MassSpringSystemSimulator:public Simulator{
 public:
-	// Construtors
+	// Constructors
 	MassSpringSystemSimulator();
 	
 	// UI Functions
@@ -21,6 +25,10 @@ public:
 	void drawFrame(ID3D11DeviceContext* pd3dImmediateContext);
 	void notifyCaseChanged(int testCase);
 	void externalForcesCalculations(float timeElapsed);
+	void computeForces();
+	void integratePositionsEuler(float timestep);
+	void integrateVelocitiesEuler(float timestep);
+	void simulateTimestepEuler(float timestep);
 	void simulateTimestep(float timeStep);
 	void onClick(int x, int y);
 	void onMouse(int x, int y);
@@ -39,7 +47,7 @@ public:
 	
 	// Do Not Change
 	void setIntegrator(int integrator) {
-		m_iIntegrator = integrator;
+		m_iIntegrator = integrator;	
 	}
 
 private:
@@ -48,11 +56,15 @@ private:
 	float m_fStiffness;
 	float m_fDamping;
 	int m_iIntegrator;
-
+	
 	// UI Attributes
 	Vec3 m_externalForce;
 	Point2D m_mouse;
 	Point2D m_trackmouse;
 	Point2D m_oldtrackmouse;
+	std::vector<Point> points;
+	std::vector<Spring> springs;
+	DemoScene* currentDemo;
+	std::vector<std::unique_ptr<DemoScene>> scenes;
 };
 #endif
