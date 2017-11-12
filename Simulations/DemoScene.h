@@ -5,6 +5,9 @@
 
 class MassSpringSystemSimulator;
 
+//Demo Scene should setup the points and springs 
+// (in the init method) and possibly implement  
+// other features that are specific for a certain "demo".
 class DemoScene
 {
 public:

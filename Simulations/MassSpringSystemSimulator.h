@@ -37,7 +37,9 @@ public:
 	void setMass(float mass);
 	void setStiffness(float stiffness);
 	void setDampingFactor(float damping);
+	//returns the index of the point in the vector 'points'
 	int addMassPoint(Vec3 position, Vec3 Velocity, bool isFixed);
+	//masspoint1 and masspoint2 are indices returned by the addMassPoint function.
 	void addSpring(int masspoint1, int masspoint2, float initialLength);
 	int getNumberOfMassPoints();
 	int getNumberOfSprings();
@@ -52,9 +54,13 @@ public:
 
 private:
 	// Data Attributes
+	//used for every new point
 	float m_fMass;
+	//used for every new spring
 	float m_fStiffness;
+	//TODO: Damping is not used, yet
 	float m_fDamping;
+	//MIDPOINT or EULER
 	int m_iIntegrator;
 	
 	// UI Attributes
@@ -62,9 +68,13 @@ private:
 	Point2D m_mouse;
 	Point2D m_trackmouse;
 	Point2D m_oldtrackmouse;
+	//list of all points, a new point is added by the function addMassPoint
 	std::vector<Point> points;
+	//list of all springs, a new spring is inserted using the addSpring function.
 	std::vector<Spring> springs;
+	//currently selected demo scene, might be null (e.g. during the unit tests)
 	DemoScene* currentDemo;
+	//Demo Scenes should correspond to demo 1, demo2 etc. in the assignments, this is a list of all available scenes
 	std::vector<std::unique_ptr<DemoScene>> scenes;
 };
 #endif
