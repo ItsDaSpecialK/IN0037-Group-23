@@ -11,7 +11,7 @@ MassSpringSystemSimulator::MassSpringSystemSimulator()
 
 const char* MassSpringSystemSimulator::getTestCasesStr()
 {
-	return "Demo 1, Demo2, Demo3, Demo 4, Demo 5";
+	return "Demo 1, Demo 2, Demo 3, Demo 4, Demo 5";
 }
 void MassSpringSystemSimulator::initUI(DrawingUtilitiesClass* DUC)
 {
@@ -159,14 +159,15 @@ void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
 
 void MassSpringSystemSimulator::simulateTimestep(float timeStep)
 {
-	if (m_iIntegrator == EULER)
-	{
-		simulateTimestepEuler(timeStep);
+	switch (m_iIntegrator) {
+		case EULER:
+			simulateTimestepEuler(timeStep);
+			break;
+		case MIDPOINT:
+			simulateTimestepMidpoint(timeStep);
+			break;
 	}
-	else if (m_iIntegrator == MIDPOINT)
-	{
-		simulateTimestepMidpoint(timeStep);
-	}
+	enforceBounds();
 }
 
 void MassSpringSystemSimulator::onClick(int x, int y)
@@ -250,6 +251,27 @@ Vec3 MassSpringSystemSimulator::calculateExternalForces(float timeStep)
 	}
 	else {
 		return Vec3(0, 0, 0);
+	}
+}
+
+#define BOX_DIMENSION 2
+
+void MassSpringSystemSimulator::enforceBounds() {
+	for (Point& point : points) {
+		if (point.position.x < -BOX_DIMENSION)
+			point.position.x = -BOX_DIMENSION;
+		else if (point.position.x > BOX_DIMENSION)
+			point.position.x = BOX_DIMENSION;
+
+		if (point.position.y < -BOX_DIMENSION)
+			point.position.y = -BOX_DIMENSION;
+		else if (point.position.y > BOX_DIMENSION)
+			point.position.y = BOX_DIMENSION;
+
+		if (point.position.z < -BOX_DIMENSION)
+			point.position.z = -BOX_DIMENSION;
+		else if (point.position.z > BOX_DIMENSION)
+			point.position.z = BOX_DIMENSION;
 	}
 }
 
