@@ -80,6 +80,8 @@ private:
 	//Demo Scenes should correspond to demo 1, demo2 etc. in the assignments, this is a list of all available scenes
 	std::vector<std::unique_ptr<DemoScene>> scenes;
 
-	Vec3 calculateExternalForces(float timeStep);
+	Vec3 calculateUserInteractionForce(float timeStep);
+	Vec3 calculateGravity();
+	Vec3 calculateCollisionWithGround();
 };
 #endif

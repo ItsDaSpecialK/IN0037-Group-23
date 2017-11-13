@@ -67,12 +67,18 @@ void MassSpringSystemSimulator::externalForcesCalculations(float timeElapsed)
 
 void MassSpringSystemSimulator::computeForces(float timeStep)
 {
+	
+	
 
-	Vec3 externalForce = calculateExternalForces(timeStep);
+	
 	for (Point& p : points)
 	{
 		p.force = 0;
+		p.force += Vec3(0, -0.5, 0);
+
 	}
+
+
 	for (Spring& s : springs)
 	{
 		float k = s.stifness;
@@ -83,10 +89,10 @@ void MassSpringSystemSimulator::computeForces(float timeStep)
 		Vec3 pos2 = p2.position;
 		float l = norm(pos1 - pos2);
 		Vec3 force = -k * (L - l) *  (pos2 - pos1) / l;
-		p1.force += force + externalForce;
-		p2.force -= force + externalForce;
+		p1.force += force;
+		p2.force -= force;
 	}
-	//TODO: add external forces...
+	applyExternalForce(calculateUserInteractionForce(timeStep));
 }
 
 
@@ -229,7 +235,7 @@ Vec3 MassSpringSystemSimulator::getVelocityOfMassPoint(int index)
 	return points.at(index).velocity;
 }
 
-Vec3 MassSpringSystemSimulator::calculateExternalForces(float timeStep)
+Vec3 MassSpringSystemSimulator::calculateUserInteractionForce(float timeStep)
 {
 	cout << "calculateExternalForces" << endl;
 	// Apply the mouse deltas to g_vfMovableObjectPos (move along cameras view plane)
@@ -252,6 +258,25 @@ Vec3 MassSpringSystemSimulator::calculateExternalForces(float timeStep)
 		return Vec3(0, 0, 0);
 	}
 }
+Vec3 calculateGravity()
+{
+	return Vec3(0, 0, -3);
+}
+
+Vec3 MassSpringSystemSimulator::calculateCollisionWithGround()
+{
+	return Vec3(0, 0, 0);
+}
+
+
+void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
+{
+	for (Point & p : points)
+	{
+		p.force += force;
+	}
+}
+
 
 //void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
 //{
