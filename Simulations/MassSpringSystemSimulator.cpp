@@ -298,7 +298,7 @@ void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
 }
 
 
-#define BOX_DIMENSION 2
+#define BOX_DIMENSION 8.f
 
 void MassSpringSystemSimulator::enforceBounds() {
 	for (Point& point : points) {
@@ -310,8 +310,8 @@ void MassSpringSystemSimulator::enforceBounds() {
 			point.velocity.x = 0;
 		}
 
-		if (point.position.y < -BOX_DIMENSION) {
-			point.position.y = -BOX_DIMENSION;
+		if (point.position.y < -4) {
+			point.position.y = -4;
 			point.velocity.y = 0;
 		} else if (point.position.y > BOX_DIMENSION) {
 			point.position.y = BOX_DIMENSION;
