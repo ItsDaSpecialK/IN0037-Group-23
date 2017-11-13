@@ -20,6 +20,7 @@ public:
 
 	virtual ~DemoScene() = default;
 	virtual void init() = 0;
+	virtual void stepPerformedCallback() = 0;
 	//TODO: Add other "demo-specific" features as virtual functions, that are called from the MassSpringSystemSimulator file.
 
 };

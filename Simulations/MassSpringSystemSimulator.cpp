@@ -1,17 +1,23 @@
 #include "MassSpringSystemSimulator.h"
 #include "Demo1.h"
+#include "Demo2.h"
+#include "Demo4.h"
+#include "Demo3.h"
 
 MassSpringSystemSimulator::MassSpringSystemSimulator()
 	:currentDemo(nullptr)
 {
 	scenes.push_back(std::make_unique<Demo1>(*this));
+	scenes.push_back(std::make_unique<Demo2>(*this));
+	scenes.push_back(std::make_unique<Demo3>(*this));
+	scenes.push_back(std::make_unique<Demo4>(*this));
 	//TODO: push back other types of scenes.
 	// When the i-th demo is selected from the drop-down menu, the i-th DemoScene is taken from the list...
 }
 
 const char* MassSpringSystemSimulator::getTestCasesStr()
 {
-	return "Demo 1, Demo2, Demo3, Demo 4, Demo 5";
+	return "Demo 1, Demo 2, Demo 3, Demo 4";
 }
 void MassSpringSystemSimulator::initUI(DrawingUtilitiesClass* DUC)
 {
@@ -167,6 +173,7 @@ void MassSpringSystemSimulator::simulateTimestep(float timeStep)
 	{
 		simulateTimestepMidpoint(timeStep);
 	}
+	if (currentDemo) currentDemo->stepPerformedCallback();
 }
 
 void MassSpringSystemSimulator::onClick(int x, int y)
