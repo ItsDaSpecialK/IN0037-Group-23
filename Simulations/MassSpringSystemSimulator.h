@@ -56,6 +56,12 @@ public:
 		m_iIntegrator = integrator;	
 	}
 
+
+	std::vector<Point>& getPoints()
+	{
+		return points;
+	}
+
 private:
 	// Data Attributes
 	//used for every new point
