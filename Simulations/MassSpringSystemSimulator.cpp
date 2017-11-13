@@ -166,6 +166,9 @@ void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
 	computeForces(time_step);
 	for (Point & point : points)
 	{
+		if (point.is_fixed)
+			continue;
+
 		//See the lecture02 slides, esp. the slides (pages) 48 and 71  
 		point.positionTemp = point.position + point.velocity * time_step / 2;
 		Vec3 acc = point.force / point.mass;
@@ -176,6 +179,9 @@ void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
 	computeForcesTmp();
 	for (Point& point : points)
 	{
+		if (point.is_fixed)
+			continue;
+
 		Vec3 acc = point.force / point.mass;
 		point.velocity += acc * time_step;
 	}
@@ -298,7 +304,7 @@ void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
 }
 
 
-#define BOX_DIMENSION 2
+#define BOX_DIMENSION 8.f
 
 void MassSpringSystemSimulator::enforceBounds() {
 	for (Point& point : points) {
@@ -310,8 +316,8 @@ void MassSpringSystemSimulator::enforceBounds() {
 			point.velocity.x = 0;
 		}
 
-		if (point.position.y < -BOX_DIMENSION) {
-			point.position.y = -BOX_DIMENSION;
+		if (point.position.y < -4) {
+			point.position.y = -4;
 			point.velocity.y = 0;
 		} else if (point.position.y > BOX_DIMENSION) {
 			point.position.y = BOX_DIMENSION;
