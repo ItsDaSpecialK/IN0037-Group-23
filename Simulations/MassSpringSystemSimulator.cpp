@@ -106,6 +106,9 @@ void MassSpringSystemSimulator::integratePositionsEuler(float timestep)
 {
 	for (Point& p : points)
 	{
+		if (p.is_fixed)
+			continue;
+
 		p.position += p.velocity* timestep;
 	}
 }
@@ -114,6 +117,9 @@ void MassSpringSystemSimulator::integrateVelocitiesEuler(float timestep)
 {
 	for (Point& p : points)
 	{
+		if (p.is_fixed)
+			continue;
+
 		Vec3 acc = p.force / p.mass;
 		p.velocity += acc * timestep;
 	}
