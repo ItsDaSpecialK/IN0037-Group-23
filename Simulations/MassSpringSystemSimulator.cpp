@@ -31,10 +31,15 @@ void MassSpringSystemSimulator::initUI(DrawingUtilitiesClass* DUC)
 	reset();
 }
 
-void MassSpringSystemSimulator::reset()
+void MassSpringSystemSimulator::clearSimulation()
 {
 	points.clear();
 	springs.clear();
+}
+
+void MassSpringSystemSimulator::reset()
+{
+	clearSimulation();
 	if (currentDemo) {
 		currentDemo->init();
 	}
@@ -254,7 +259,6 @@ Vec3 MassSpringSystemSimulator::getVelocityOfMassPoint(int index)
 
 Vec3 MassSpringSystemSimulator::calculateUserInteractionForce(float timeStep)
 {
-	cout << "calculateExternalForces" << endl;
 	// Apply the mouse deltas to g_vfMovableObjectPos (move along cameras view plane)
 	Point2D mouseDiff;
 	mouseDiff.x = m_trackmouse.x - m_oldtrackmouse.x;
@@ -268,7 +272,6 @@ Vec3 MassSpringSystemSimulator::calculateUserInteractionForce(float timeStep)
 		// find a proper scale!
 		float inputScale = 1.0f;
 		inputWorld = inputWorld * inputScale;
-		cout << "apply mouse force" << endl;
 		return inputWorld;
 	}
 	else {

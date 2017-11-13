@@ -3,11 +3,13 @@
 #define DEMO1_H
 
 #include "DemoScene.h"
+#include "TwoPointsDemoScene.h"
+
 //The demo 1 initialization, see the pdf assignment for details.
-class Demo1 :public DemoScene
+class Demo1 :public TwoPointsDemoScene
 {
 public:
-	Demo1(MassSpringSystemSimulator& s) : DemoScene(s), elapsed_frames(0)
+	Demo1(MassSpringSystemSimulator& s) : TwoPointsDemoScene(s)
 	{
 	}
 
@@ -17,7 +19,7 @@ public:
 
 	~Demo1() override;
 private:
-	int elapsed_frames;
+	
 };
 
 

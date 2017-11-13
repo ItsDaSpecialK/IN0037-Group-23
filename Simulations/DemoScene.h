@@ -3,6 +3,7 @@
 #include "Spring.h"
 #include <vector>
 
+
 class MassSpringSystemSimulator;
 
 //Demo Scene should setup the points and springs 
@@ -22,6 +23,9 @@ public:
 	virtual void init() = 0;
 	virtual void stepPerformedCallback() = 0;
 	//TODO: Add other "demo-specific" features as virtual functions, that are called from the MassSpringSystemSimulator file.
+	
+	void print_points_info();
 
 };
+
 

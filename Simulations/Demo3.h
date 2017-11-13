@@ -3,13 +3,14 @@
 
 
 #include "DemoScene.h"
+#include "TwoPointsDemoScene.h"
 
-class Demo3 : public DemoScene
+class Demo3 : public TwoPointsDemoScene
 {
 public:
 
 	explicit Demo3(MassSpringSystemSimulator& simulator)
-		: DemoScene(simulator)
+		: TwoPointsDemoScene(simulator)
 	{
 	}
 

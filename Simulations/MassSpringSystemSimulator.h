@@ -20,6 +20,7 @@ public:
 	// UI Functions
 	const char * getTestCasesStr();
 	void initUI(DrawingUtilitiesClass * DUC);
+	void clearSimulation();
 	void reset();
 	void drawFrame(ID3D11DeviceContext* pd3dImmediateContext);
 	void notifyCaseChanged(int testCase);
@@ -88,7 +89,6 @@ private:
 	std::vector<std::unique_ptr<DemoScene>> scenes;
 
 	Vec3 calculateUserInteractionForce(float timeStep);
-	Vec3 calculateGravity();
 	Vec3 calculateCollisionWithGround();
 };
 #endif
