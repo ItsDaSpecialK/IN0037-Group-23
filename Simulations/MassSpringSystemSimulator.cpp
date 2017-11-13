@@ -106,8 +106,14 @@ void MassSpringSystemSimulator::integratePositionsEuler(float timestep)
 {
 	for (Point& p : points)
 	{
+<<<<<<< HEAD
 		if (!p.is_fixed)
 		{
+=======
+		if (p.is_fixed)
+			continue;
+
+>>>>>>> bc26929424e7e621e19aedd5d1f01db8eb45e0c6
 		p.position += p.velocity* timestep;
 		}
 	}
@@ -117,6 +123,9 @@ void MassSpringSystemSimulator::integrateVelocitiesEuler(float timestep)
 {
 	for (Point& p : points)
 	{
+		if (p.is_fixed)
+			continue;
+
 		Vec3 acc = p.force / p.mass;
 		p.velocity += acc * timestep;
 	}
@@ -293,20 +302,29 @@ void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
 
 void MassSpringSystemSimulator::enforceBounds() {
 	for (Point& point : points) {
-		if (point.position.x < -BOX_DIMENSION)
+		if (point.position.x < -BOX_DIMENSION) {
 			point.position.x = -BOX_DIMENSION;
-		else if (point.position.x > BOX_DIMENSION)
+			point.velocity.x = 0;
+		} else if (point.position.x > BOX_DIMENSION) {
 			point.position.x = BOX_DIMENSION;
+			point.velocity.x = 0;
+		}
 
-		if (point.position.y < -BOX_DIMENSION)
+		if (point.position.y < -BOX_DIMENSION) {
 			point.position.y = -BOX_DIMENSION;
-		else if (point.position.y > BOX_DIMENSION)
+			point.velocity.y = 0;
+		} else if (point.position.y > BOX_DIMENSION) {
 			point.position.y = BOX_DIMENSION;
+			point.velocity.y = 0;
+		}
 
-		if (point.position.z < -BOX_DIMENSION)
+		if (point.position.z < -BOX_DIMENSION) {
 			point.position.z = -BOX_DIMENSION;
-		else if (point.position.z > BOX_DIMENSION)
+			point.velocity.z = 0;
+		} else if (point.position.z > BOX_DIMENSION) {
 			point.position.z = BOX_DIMENSION;
+			point.velocity.z = 0;
+		}
 	}
 }
 
