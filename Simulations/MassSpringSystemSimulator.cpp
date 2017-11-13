@@ -30,11 +30,11 @@ void MassSpringSystemSimulator::reset()
 
  void MassSpringSystemSimulator::drawFrame(ID3D11DeviceContext* pd3dImmediateContext)
 {
-	float scale = 0.1;
+	float scale = 0.25;
 	DUC->setUpLighting(Vec3(), 0.4*Vec3(1, 1, 1), 100, 0.6*Vec3(0, 1, 0));
 	for (Point & p : points)
 	{
-		DUC->drawSphere(p.position* scale, .1);
+		DUC->drawSphere(p.position* scale, .05);
 	}
 	for (Spring &s : springs)
 	{
