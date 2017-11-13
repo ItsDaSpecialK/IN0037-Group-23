@@ -5,7 +5,7 @@
 #include "Demo3.h"
 
 MassSpringSystemSimulator::MassSpringSystemSimulator()
-	:currentDemo(nullptr)
+	:currentDemo(nullptr), gravity(0,0,0), gravityScale(1)
 {
 	scenes.push_back(std::make_unique<Demo1>(*this));
 	scenes.push_back(std::make_unique<Demo2>(*this));
@@ -28,6 +28,7 @@ void MassSpringSystemSimulator::initUI(DrawingUtilitiesClass* DUC)
 	TwType TW_TYPE_INTEGRATOR = TwDefineEnumFromString("Integrator", "Euler, Leapfrog, Midpoint");
 	//Then, we create the listbox, the changed value will be directly written into the variable 'm_iIntegrator'
 	TwAddVarRW(DUC->g_pTweakBar, "Integrator", TW_TYPE_INTEGRATOR, &m_iIntegrator, "");
+	TwAddVarRW(DUC->g_pTweakBar, "Gravity scale", TW_TYPE_FLOAT, &gravityScale, "");
 	reset();
 }
 
@@ -81,7 +82,7 @@ void MassSpringSystemSimulator::computeForces()
 	
 	for (Point& p : points)
 	{
-		p.force = 0;
+		p.force = gravity * gravityScale;
 	}
 
 
@@ -128,7 +129,7 @@ void MassSpringSystemSimulator::integrateVelocitiesEuler(float timestep)
 void MassSpringSystemSimulator::simulateTimestepEuler(float timestep)
 {
 	computeForces();
-    applyExternalForce(calculateUserInteractionForce(timestep));
+    addExternalForcesToPoints(calculateUserInteractionForce(timestep));
 	integratePositionsEuler(timestep);
 	integrateVelocitiesEuler(timestep);
 }
@@ -138,7 +139,7 @@ void MassSpringSystemSimulator::computeForcesTmp()
 {
 	for (Point& p : points)
 	{
-		p.force = 0;
+		p.force = gravity * gravityScale;
 	}
 	for (Spring& s : springs)
 	{
@@ -153,12 +154,13 @@ void MassSpringSystemSimulator::computeForcesTmp()
 		p1.force += force;
 		p2.force -= force;
 	}
-	//TODO: add external forces...
 }
 
 void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
 {
+	auto user_force = calculateUserInteractionForce(time_step);
 	computeForces();
+	addExternalForcesToPoints(user_force);
 	for (Point & point : points)
 	{
 		if (point.is_fixed)
@@ -172,7 +174,7 @@ void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
 	}
 	//Compute the forces in the midpoint and calculate accelerations from them...
 	computeForcesTmp();
-	applyExternalForce(calculateUserInteractionForce(time_step));
+	addExternalForcesToPoints(user_force);
 	for (Point& point : points)
 	{
 		if (point.is_fixed)
@@ -278,23 +280,19 @@ Vec3 MassSpringSystemSimulator::calculateUserInteractionForce(float timeStep)
 		return Vec3(0, 0, 0);
 	}
 }
-Vec3 calculateGravity()
-{
-	return Vec3(0, 0, -3);
-}
-
-Vec3 MassSpringSystemSimulator::calculateCollisionWithGround()
-{
-	return Vec3(0, 0, 0);
-}
 
 
-void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
+void MassSpringSystemSimulator::addExternalForcesToPoints(Vec3 force)
 {
 	for (Point & p : points)
 	{
 		p.force += force;
 	}
+}
+
+void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
+{
+	gravity = force;
 }
 
 

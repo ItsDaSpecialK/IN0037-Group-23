@@ -5,7 +5,7 @@ void Demo4::init()
 {
 	
 	simulator.setMass(10);
-	
+	simulator.applyExternalForce(Vec3(0, -1, 0));
 	int anchor = simulator.addMassPoint(Vec3(0, 3.5f, 0), Vec3(0.f), true);
 	int floating = simulator.addMassPoint(Vec3(0, 3, 0), Vec3(0.f), false);
 	int bottom = simulator.addMassPoint(Vec3(0, 2, 0), Vec3(1, -5, 0), false);

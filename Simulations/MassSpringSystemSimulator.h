@@ -50,6 +50,7 @@ public:
 	Vec3 getPositionOfMassPoint(int index);
 	Vec3 getVelocityOfMassPoint(int index);
 	void applyExternalForce(Vec3 force);
+	void addExternalForcesToPoints(Vec3 force);
 	void enforceBounds();
 	
 	// Do Not Change
@@ -87,8 +88,8 @@ private:
 	DemoScene* currentDemo;
 	//Demo Scenes should correspond to demo 1, demo2 etc. in the assignments, this is a list of all available scenes
 	std::vector<std::unique_ptr<DemoScene>> scenes;
-
+	Vec3 gravity;
+	float gravityScale;
 	Vec3 calculateUserInteractionForce(float timeStep);
-	Vec3 calculateCollisionWithGround();
 };
 #endif
