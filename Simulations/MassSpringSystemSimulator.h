@@ -12,7 +12,6 @@
 // Do Not Change
 
 
-
 class MassSpringSystemSimulator:public Simulator{
 public:
 	// Constructors
@@ -29,6 +28,10 @@ public:
 	void integratePositionsEuler(float timestep);
 	void integrateVelocitiesEuler(float timestep);
 	void simulateTimestepEuler(float timestep);
+	//Computes the forces based on the temporary positions of points
+	//I.e. the positions that were generated only for the intermediate step of the integration.
+	void computeForcesTmp();
+	void simulateTimestepMidpoint(float time_step);
 	void simulateTimestep(float timeStep);
 	void onClick(int x, int y);
 	void onMouse(int x, int y);

@@ -1,11 +1,12 @@
 #include "MassSpringSystemSimulator.h"
 #include "Demo1.h"
 
-
 MassSpringSystemSimulator::MassSpringSystemSimulator()
 :currentDemo(nullptr)
 {
 	scenes.push_back(std::make_unique<Demo1>(*this));
+	//TODO: push back other types of scenes.
+	// When the i-th demo is selected from the drop-down menu, the i-th DemoScene is taken from the list...
 }
 
 const char* MassSpringSystemSimulator::getTestCasesStr()
@@ -16,6 +17,11 @@ const char* MassSpringSystemSimulator::getTestCasesStr()
 {
 	 this->DUC = DUC;
 	currentDemo = scenes.at(m_iTestCase).get();
+	//we add a new listbox to the control panel:
+	//first, we create a new "enum type"
+	TwType TW_TYPE_INTEGRATOR = TwDefineEnumFromString("Integrator", "Euler, Leapfrog, Midpoint");
+	//Then, we create the listbox, the changed value will be directly written into the variable 'm_iIntegrator'
+	TwAddVarRW(DUC->g_pTweakBar, "Integrator", TW_TYPE_INTEGRATOR, &m_iIntegrator, "");
 	reset();
 }
 
@@ -105,14 +111,58 @@ void MassSpringSystemSimulator::simulateTimestepEuler(float timestep)
 	integrateVelocitiesEuler(timestep);
 }
 
+
+void MassSpringSystemSimulator::computeForcesTmp()
+{
+	for (Point& p : points)
+	{
+		p.force = 0;
+	}
+	for (Spring& s : springs)
+	{
+		float k = s.stifness;
+		float L = s.initialLength;
+		Point& p1 = points.at(s.point1);
+		Point& p2 = points.at(s.point2);
+		Vec3 pos1 = p1.positionTemp;
+		Vec3 pos2 = p2.positionTemp;
+		float l = norm(pos1 - pos2);
+		Vec3 force = -k * (L - l) *  (pos2 - pos1) / l;
+		p1.force += force;
+		p2.force -= force;
+	}
+	//TODO: add external forces...
+}
+
+void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
+{
+	computeForces();
+	for (Point  & point : points)
+	{
+		//See the lecture02 slides, esp. the slides (pages) 48 and 71  
+		point.positionTemp = point.position + point.velocity * time_step / 2;
+		Vec3 acc = point.force / point.mass;
+		point.velocityTemp = point.velocity + acc * time_step / 2;
+		point.position += point.velocityTemp*time_step;
+	}
+	//Compute the forces in the midpoint and calculate accelerations from them...
+	computeForcesTmp();
+	for (Point& point : points)
+	{
+		Vec3 acc = point.force / point.mass;
+		point.velocity += acc * time_step;
+	}
+}
+
 void MassSpringSystemSimulator::simulateTimestep(float timeStep)
 {
 	if (m_iIntegrator == EULER)
 	{
 		simulateTimestepEuler(timeStep);
 	}
-	else if (m_iTestCase == MIDPOINT)
+	else if (m_iIntegrator == MIDPOINT)
 	{
+		simulateTimestepMidpoint(timeStep);
 	}
 }
 
