@@ -2,7 +2,7 @@
 #include "Demo1.h"
 
 MassSpringSystemSimulator::MassSpringSystemSimulator()
-:currentDemo(nullptr)
+	:currentDemo(nullptr)
 {
 	scenes.push_back(std::make_unique<Demo1>(*this));
 	//TODO: push back other types of scenes.
@@ -13,9 +13,9 @@ const char* MassSpringSystemSimulator::getTestCasesStr()
 {
 	return "Demo 1, Demo2, Demo3, Demo 4, Demo 5";
 }
- void MassSpringSystemSimulator::initUI(DrawingUtilitiesClass* DUC)
+void MassSpringSystemSimulator::initUI(DrawingUtilitiesClass* DUC)
 {
-	 this->DUC = DUC;
+	this->DUC = DUC;
 	currentDemo = scenes.at(m_iTestCase).get();
 	//we add a new listbox to the control panel:
 	//first, we create a new "enum type"
@@ -34,7 +34,7 @@ void MassSpringSystemSimulator::reset()
 	}
 }
 
- void MassSpringSystemSimulator::drawFrame(ID3D11DeviceContext* pd3dImmediateContext)
+void MassSpringSystemSimulator::drawFrame(ID3D11DeviceContext* pd3dImmediateContext)
 {
 	float scale = 0.25;
 	DUC->setUpLighting(Vec3(), 0.4*Vec3(1, 1, 1), 100, 0.6*Vec3(0, 1, 0));
@@ -65,8 +65,10 @@ void MassSpringSystemSimulator::externalForcesCalculations(float timeElapsed)
 {
 }
 
-void MassSpringSystemSimulator::computeForces()
+void MassSpringSystemSimulator::computeForces(float timeStep)
 {
+
+	Vec3 externalForce = calculateExternalForces(timeStep);
 	for (Point& p : points)
 	{
 		p.force = 0;
@@ -74,18 +76,19 @@ void MassSpringSystemSimulator::computeForces()
 	for (Spring& s : springs)
 	{
 		float k = s.stifness;
-		float L= s.initialLength;
+		float L = s.initialLength;
 		Point& p1 = points.at(s.point1);
 		Point& p2 = points.at(s.point2);
 		Vec3 pos1 = p1.position;
 		Vec3 pos2 = p2.position;
 		float l = norm(pos1 - pos2);
 		Vec3 force = -k * (L - l) *  (pos2 - pos1) / l;
-		p1.force += force;
-		p2.force -= force;
+		p1.force += force + externalForce;
+		p2.force -= force + externalForce;
 	}
 	//TODO: add external forces...
 }
+
 
 void MassSpringSystemSimulator::integratePositionsEuler(float timestep)
 {
@@ -106,7 +109,7 @@ void MassSpringSystemSimulator::integrateVelocitiesEuler(float timestep)
 
 void MassSpringSystemSimulator::simulateTimestepEuler(float timestep)
 {
-	computeForces();
+	computeForces(timestep);
 	integratePositionsEuler(timestep);
 	integrateVelocitiesEuler(timestep);
 }
@@ -136,8 +139,8 @@ void MassSpringSystemSimulator::computeForcesTmp()
 
 void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
 {
-	computeForces();
-	for (Point  & point : points)
+	computeForces(time_step);
+	for (Point & point : points)
 	{
 		//See the lecture02 slides, esp. the slides (pages) 48 and 71  
 		point.positionTemp = point.position + point.velocity * time_step / 2;
@@ -168,10 +171,16 @@ void MassSpringSystemSimulator::simulateTimestep(float timeStep)
 
 void MassSpringSystemSimulator::onClick(int x, int y)
 {
+	m_trackmouse.x = x;
+	m_trackmouse.y = y;
 }
 
 void MassSpringSystemSimulator::onMouse(int x, int y)
 {
+	m_oldtrackmouse.x = x;
+	m_oldtrackmouse.y = y;
+	m_trackmouse.x = x;
+	m_trackmouse.y = y;
 }
 
 void MassSpringSystemSimulator::setMass(float mass)
@@ -220,7 +229,51 @@ Vec3 MassSpringSystemSimulator::getVelocityOfMassPoint(int index)
 	return points.at(index).velocity;
 }
 
-void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
+Vec3 MassSpringSystemSimulator::calculateExternalForces(float timeStep)
 {
-	//throw std::exception("Not implemented.");
+	cout << "calculateExternalForces" << endl;
+	// Apply the mouse deltas to g_vfMovableObjectPos (move along cameras view plane)
+	Point2D mouseDiff;
+	mouseDiff.x = m_trackmouse.x - m_oldtrackmouse.x;
+	mouseDiff.y = m_trackmouse.y - m_oldtrackmouse.y;
+	if (mouseDiff.x != 0 || mouseDiff.y != 0)
+	{
+		Mat4 worldViewInv = Mat4(DUC->g_camera.GetWorldMatrix() * DUC->g_camera.GetViewMatrix());
+		worldViewInv = worldViewInv.inverse();
+		Vec3 inputView = Vec3((float)mouseDiff.x, (float)-mouseDiff.y, 0);
+		Vec3 inputWorld = worldViewInv.transformVectorNormal(inputView);
+		// find a proper scale!
+		float inputScale = 1.0f;
+		inputWorld = inputWorld * inputScale;
+		cout << "apply mouse force" << endl;
+		return inputWorld;
+	}
+	else {
+		return Vec3(0, 0, 0);
+	}
 }
+
+//void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
+//{
+//	//throw std::exception("Not implemented.");
+//	// Apply the mouse deltas to g_vfMovableObjectPos (move along cameras view plane)
+//	Point2D mouseDiff;
+//	mouseDiff.x = m_trackmouse.x - m_oldtrackmouse.x;
+//	mouseDiff.y = m_trackmouse.y - m_oldtrackmouse.y;
+//	if (mouseDiff.x != 0 || mouseDiff.y != 0)
+//	{
+//		Mat4 worldViewInv = Mat4(DUC->g_camera.GetWorldMatrix() * DUC->g_camera.GetViewMatrix());
+//		worldViewInv = worldViewInv.inverse();
+//		Vec3 inputView = Vec3((float)mouseDiff.x, (float)-mouseDiff.y, 0);
+//		Vec3 inputWorld = worldViewInv.transformVectorNormal(inputView);
+//		// find a proper scale!
+//		float inputScale = 0.001f;
+//		inputWorld = inputWorld * inputScale;
+//		m_vfMovableObjectPos = m_vfMovableObjectFinalPos + inputWorld;
+//	}
+//	else {
+//		m_vfMovableObjectFinalPos = m_vfMovableObjectPos;
+//	}	
+//}
+
+

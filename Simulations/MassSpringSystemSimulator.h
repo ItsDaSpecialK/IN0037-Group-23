@@ -24,7 +24,7 @@ public:
 	void drawFrame(ID3D11DeviceContext* pd3dImmediateContext);
 	void notifyCaseChanged(int testCase);
 	void externalForcesCalculations(float timeElapsed);
-	void computeForces();
+	void computeForces(float timeStep);
 	void integratePositionsEuler(float timestep);
 	void integrateVelocitiesEuler(float timestep);
 	void simulateTimestepEuler(float timestep);
@@ -79,5 +79,7 @@ private:
 	DemoScene* currentDemo;
 	//Demo Scenes should correspond to demo 1, demo2 etc. in the assignments, this is a list of all available scenes
 	std::vector<std::unique_ptr<DemoScene>> scenes;
+
+	Vec3 calculateExternalForces(float timeStep);
 };
 #endif
