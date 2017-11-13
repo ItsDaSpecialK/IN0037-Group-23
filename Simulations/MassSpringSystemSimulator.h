@@ -24,7 +24,7 @@ public:
 	void drawFrame(ID3D11DeviceContext* pd3dImmediateContext);
 	void notifyCaseChanged(int testCase);
 	void externalForcesCalculations(float timeElapsed);
-	void computeForces(float timeStep);
+	void computeForces();
 	void integratePositionsEuler(float timestep);
 	void integrateVelocitiesEuler(float timestep);
 	void simulateTimestepEuler(float timestep);

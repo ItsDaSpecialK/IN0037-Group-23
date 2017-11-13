@@ -71,17 +71,12 @@ void MassSpringSystemSimulator::externalForcesCalculations(float timeElapsed)
 {
 }
 
-void MassSpringSystemSimulator::computeForces(float timeStep)
+void MassSpringSystemSimulator::computeForces()
 {
-	
-	
-
 	
 	for (Point& p : points)
 	{
 		p.force = 0;
-		p.force += Vec3(0, -0.5, 0);
-
 	}
 
 
@@ -98,7 +93,7 @@ void MassSpringSystemSimulator::computeForces(float timeStep)
 		p1.force += force;
 		p2.force -= force;
 	}
-	applyExternalForce(calculateUserInteractionForce(timeStep));
+	
 }
 
 
@@ -106,16 +101,10 @@ void MassSpringSystemSimulator::integratePositionsEuler(float timestep)
 {
 	for (Point& p : points)
 	{
-<<<<<<< HEAD
-		if (!p.is_fixed)
-		{
-=======
 		if (p.is_fixed)
 			continue;
 
->>>>>>> bc26929424e7e621e19aedd5d1f01db8eb45e0c6
 		p.position += p.velocity* timestep;
-		}
 	}
 }
 
@@ -133,7 +122,8 @@ void MassSpringSystemSimulator::integrateVelocitiesEuler(float timestep)
 
 void MassSpringSystemSimulator::simulateTimestepEuler(float timestep)
 {
-	computeForces(timestep);
+	computeForces();
+    applyExternalForce(calculateUserInteractionForce(timestep));
 	integratePositionsEuler(timestep);
 	integrateVelocitiesEuler(timestep);
 }
@@ -163,7 +153,7 @@ void MassSpringSystemSimulator::computeForcesTmp()
 
 void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
 {
-	computeForces(time_step);
+	computeForces();
 	for (Point & point : points)
 	{
 		if (point.is_fixed)
@@ -177,6 +167,7 @@ void MassSpringSystemSimulator::simulateTimestepMidpoint(float time_step)
 	}
 	//Compute the forces in the midpoint and calculate accelerations from them...
 	computeForcesTmp();
+	applyExternalForce(calculateUserInteractionForce(time_step));
 	for (Point& point : points)
 	{
 		if (point.is_fixed)
