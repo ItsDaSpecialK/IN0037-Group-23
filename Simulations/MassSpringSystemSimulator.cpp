@@ -296,20 +296,29 @@ void MassSpringSystemSimulator::applyExternalForce(Vec3 force)
 
 void MassSpringSystemSimulator::enforceBounds() {
 	for (Point& point : points) {
-		if (point.position.x < -BOX_DIMENSION)
+		if (point.position.x < -BOX_DIMENSION) {
 			point.position.x = -BOX_DIMENSION;
-		else if (point.position.x > BOX_DIMENSION)
+			point.velocity.x = 0;
+		} else if (point.position.x > BOX_DIMENSION) {
 			point.position.x = BOX_DIMENSION;
+			point.velocity.x = 0;
+		}
 
-		if (point.position.y < -BOX_DIMENSION)
+		if (point.position.y < -BOX_DIMENSION) {
 			point.position.y = -BOX_DIMENSION;
-		else if (point.position.y > BOX_DIMENSION)
+			point.velocity.y = 0;
+		} else if (point.position.y > BOX_DIMENSION) {
 			point.position.y = BOX_DIMENSION;
+			point.velocity.y = 0;
+		}
 
-		if (point.position.z < -BOX_DIMENSION)
+		if (point.position.z < -BOX_DIMENSION) {
 			point.position.z = -BOX_DIMENSION;
-		else if (point.position.z > BOX_DIMENSION)
+			point.velocity.z = 0;
+		} else if (point.position.z > BOX_DIMENSION) {
 			point.position.z = BOX_DIMENSION;
+			point.velocity.z = 0;
+		}
 	}
 }
 
