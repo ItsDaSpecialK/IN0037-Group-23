@@ -4,8 +4,8 @@ void Demo1::init()
 {
 	simulator.setIntegrator(EULER);
 	simulator.setMass(10);
-	simulator.addMassPoint(Vec3(0, 0, 0), Vec3(-1, 0, 0), false);
-	simulator.addMassPoint(Vec3(0, 2, 0), Vec3(1, 0, 0), false);
+	simulator.addMassPoint(Vec3(0, 0, 0), Vec3(-1, 0, 0),true);
+	simulator.addMassPoint(Vec3(0, 2, 0), Vec3(1, 0, 0),true);
 	simulator.setStiffness(40);
 	simulator.addSpring(0, 1, 1);
 	elapsed_frames = 0;

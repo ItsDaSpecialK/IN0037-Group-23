@@ -106,7 +106,10 @@ void MassSpringSystemSimulator::integratePositionsEuler(float timestep)
 {
 	for (Point& p : points)
 	{
+		if (!p.is_fixed)
+		{
 		p.position += p.velocity* timestep;
+		}
 	}
 }
 
