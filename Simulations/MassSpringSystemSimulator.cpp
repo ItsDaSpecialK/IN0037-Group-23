@@ -61,7 +61,7 @@ void MassSpringSystemSimulator::externalForcesCalculations(float timeElapsed)
 
 void MassSpringSystemSimulator::computeForces()
 {
-	for (Point p : points)
+	for (Point& p : points)
 	{
 		p.force = 0;
 	}
