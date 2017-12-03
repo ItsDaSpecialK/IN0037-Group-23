@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="PublicMassSpringSystemTests.cpp" />
+    <ClCompile Include="PublicRigidBodiesTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AntTweakBar\src\AntTweakBar_2017.vcxproj">
@@ -183,6 +184,9 @@
     </ProjectReference>
     <ProjectReference Include="..\Effects11\Effects11_2017.vcxproj">
       <Project>{df460eab-570d-4b50-9089-2e2fc801bf38}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SimulationsRunner\SimulationsRunner_2017.vcxproj">
+      <Project>{0b7baa5b-0753-4015-a8f3-8fa540fc8660}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Simulations\Demo_2017.vcxproj">
       <Project>{3cabed2c-12f1-4408-aaae-e2185a426f35}</Project>
