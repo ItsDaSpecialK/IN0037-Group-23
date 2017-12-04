@@ -66,18 +66,18 @@ bool RigidBodySystem::compute_collision(RigidBody* a, RigidBody* b)
 	float numerator = - (1 + c) * v_rel_proj;
 	float ma = a->mass();
 	float mb = b->mass();
-	Mat4 ia_inv = a->inverse_inertia_matrix();
-	Mat4 ib_inv = b->inverse_inertia_matrix();
+	Mat4 ia_inv = a->inverse_inertia_matrix_rotated();
+	Mat4 ib_inv = b->inverse_inertia_matrix_rotated();
 	Vec3 xan = cross(xa, n);
 	Vec3 xbn = cross(xb, n);
 	Vec3 factor = cross(ia_inv * xan, xa) + cross(ib_inv *xbn, xb);
 	float denom = 1 / ma + 1 / mb + dot(factor, n);
 	float impulse = numerator / denom;
 	a->updateVelocity(impulse, n);
-	b->updateVelocity(impulse, n);
+	b->updateVelocity(- impulse, n);
 
-	a->updateAngularMomentum(impulse, n, xa);
-	b->updateAngularMomentum(impulse, n, xb);
+	a->addAngularMomentum(cross(xa, impulse * n));
+	b->addAngularMomentum(- cross(xb, impulse * n));
 	return true;
 }
 

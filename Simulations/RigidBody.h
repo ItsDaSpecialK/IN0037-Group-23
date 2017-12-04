@@ -164,6 +164,15 @@ public:
 	{
 		color_ = color;
 	}
+
+	Mat4 inverse_inertia_matrix_rotated() const
+	{
+		Mat4 rotMat = orientation_matrix();
+		Mat4 rotMatT = rotMat;
+		rotMatT.transpose();
+		return rotMatT * inverse_inertia_matrix() * rotMat;
+	}
+
 	void simulate_step(const float timeStep)
 	{
 		position_ = position_ + timeStep * velocity_;
@@ -174,10 +183,8 @@ public:
 		orientation_ /= orientation_.norm();	
 		angular_momentum_ += timeStep * torque_;
 			
-		Mat4 rotMat = orientation_matrix();
-		Mat4 rotMatT = rotMat;
-		rotMatT.transpose();
-		const Mat4 inverse_inertia = rotMatT * inverse_inertia_matrix() * rotMat;
+		Mat4 inverse_inertia;
+		inverse_inertia = inverse_inertia_matrix_rotated();
 		rotation_ = inverse_inertia * angular_momentum_;
 
 		//clean old values:
@@ -228,9 +235,9 @@ public:
 	}
 	
 	//update angular momentum based on a collision.
-	void updateAngularMomentum(float impulse, const Vec3 norm, const Vec3 x)
+	void addAngularMomentum(const Vec3 value)
 	{
-		angular_momentum_ += cross(x, impulse * norm);
+		angular_momentum_ += value;
 	}
 
 private:
