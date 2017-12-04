@@ -15,6 +15,7 @@ public:
 	void setOrientationOf(int i, Quat orientation);
 	void setVelocityOf(int i, Vec3 velocity);
 	void setColorOf(int i, Vec3 color);
+	bool compute_collision(RigidBody* body, RigidBody* body2);
 	void simulateTimeStep(float step);
 	std::vector<RigidBody*> bodies_;
 	~RigidBodySystem()

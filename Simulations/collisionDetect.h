@@ -1,6 +1,10 @@
 ﻿// header file:
+#pragma once
 #include <DirectXMath.h>
 #include <Vector>
+#include "util/vectorbase.h"
+#include "util/matrixbase.h"
+
 using namespace DirectX;
 
 // the return structure, with these values, you should be able to calculate the impulse

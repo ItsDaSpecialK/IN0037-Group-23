@@ -7,15 +7,16 @@ class RigidBody
 public:
 	RigidBody(const Vec3& position, int mass, const Vec3 size)
 		: position_(position),
-		orientation_(Vec3(1,0,0),0),
+		orientation_(Vec3(1, 0, 0), 0),
 		rotation_(0, 0, 0),
 		mass_(mass),
 		size_(size),
-		velocity_(0,0,0),
-		angular_momentum_(0,0,0),
-		color_(.6,0,0),
-		force_(0,0,0),
-		torque_(0,0,0)
+		velocity_(0, 0, 0),
+		angular_momentum_(0, 0, 0),
+		color_(.6, 0, 0),
+		force_(0, 0, 0),
+		torque_(0, 0, 0),
+		restitution_coef_(1)
 	{
 	}
 
@@ -100,6 +101,36 @@ public:
 		return scale_matrix() * orientation_matrix() * translation_matrix();
 	}
 
+	Mat4 inverse_transl_matrix() const
+	{
+		Mat4 mat;
+		mat.initTranslation(-position_.x, -position_.y, -position_.z);
+		return mat;
+	}
+
+	Mat4 inverse_orientation_matrix() const
+	{
+		Mat4 mat = orientation_matrix();
+		mat.transpose();
+		return mat;
+	}
+
+	Mat4 inverse_scale_matrix() const
+	{
+		Mat4 mat;
+		mat.initScaling(1 / size_.x, 1 / size_.y, 1 / size_.z);
+		return mat;
+	}
+	Vec3 transform_world_to_loc(Vec3 vec) const
+	{
+		Mat4 mat = world_to_object_matrix();
+		return mat.transformVector(vec);
+	}
+
+	Mat4 world_to_object_matrix() const
+	{
+		return inverse_transl_matrix() * inverse_orientation_matrix()* inverse_scale_matrix();
+	}
 	//From wikipedia
 	//https://en.wikipedia.org/wiki/List_of_moments_of_inertia
 	Mat4 inertia_matrix() const
@@ -181,6 +212,27 @@ public:
 		torque_ += cross(loc, force);
 	}
 
+	float restitution_coef() const
+	{
+		return restitution_coef_;
+	}
+
+	void set_restitution_coef(float restitution_coef)
+	{
+		restitution_coef_ = restitution_coef;
+	}
+	//update velocity based on a collision.
+	void updateVelocity(float impulse, const Vec3 norm)
+	{
+		velocity_ += impulse * norm / mass_;
+	}
+	
+	//update angular momentum based on a collision.
+	void updateAngularMomentum(float impulse, const Vec3 norm, const Vec3 x)
+	{
+		angular_momentum_ += cross(x, impulse * norm);
+	}
+
 private:
 	Vec3 position_;
 	Quat orientation_;
@@ -193,5 +245,6 @@ private:
 	Vec3 angular_momentum_;
 	Vec3 force_;
 	Vec3 torque_;
+	float restitution_coef_;
 
 };
