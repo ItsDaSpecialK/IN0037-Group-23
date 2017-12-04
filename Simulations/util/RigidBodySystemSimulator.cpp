@@ -75,6 +75,7 @@ void RigidBodySystemSimulator::externalForcesCalculations(float timeElapsed)
 
 void RigidBodySystemSimulator::simulateTimestep(float timeStep)
 {
+	m_system->simulateTimeStep(timeStep);
 }
 
 void RigidBodySystemSimulator::onClick(int x, int y)

@@ -22,7 +22,8 @@ Vec3 RigidBodySystem::getAngularVelocityOfRigidBody(int i)
 
 void RigidBodySystem::applyForceOnBody(int i, Vec3 loc, Vec3 force)
 {
-	//TODO: Implement
+	auto & body = bodies_.at(i);
+	body->add_force(loc, force);
 }
 
 void RigidBodySystem::addRigidBody(Vec3 position, Vec3 size, int mass)
@@ -49,6 +50,6 @@ void RigidBodySystem::simulateTimeStep(float step)
 {
 	for (RigidBody* body : bodies_)
 	{
-		//TODO: implement simulation.
+		body->simulate_step(step);
 	}
 }

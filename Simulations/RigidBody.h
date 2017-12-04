@@ -7,10 +7,15 @@ class RigidBody
 public:
 	RigidBody(const Vec3& position, int mass, const Vec3 size)
 		: position_(position),
-		orientation_(),
+		orientation_(Vec3(1,0,0),0),
 		rotation_(0, 0, 0),
 		mass_(mass),
-		size_(size)
+		size_(size),
+		velocity_(0,0,0),
+		angular_momentum_(0,0,0),
+		color_(.6,0,0),
+		force_(0,0,0),
+		torque_(0,0,0)
 	{
 	}
 
@@ -108,6 +113,17 @@ public:
 		return m;
 	}
 
+	Mat4 inverse_inertia_matrix() const
+	{
+		Mat4 m;
+		float h = size_[1];
+		float w = size_[0];
+		float d = size_[2];
+		m.initScaling(1/(h*h + d*d), 1/(w*w + d*d), 1/(w*w + h*h));
+		m *= 12 / mass_;
+		return m;
+	}
+
 	Vec3 color() const
 	{
 		return color_;
@@ -117,7 +133,53 @@ public:
 	{
 		color_ = color;
 	}
+	void simulate_step(const float timeStep)
+	{
+		position_ = position_ + timeStep * velocity_;
+		velocity_ = velocity_ + timeStep * (force_ / mass_);
+		Quat quat(rotation_, 0);
+		orientation_ = orientation_ + timeStep / 2 * quat * orientation_;
+		//Normalize the quaternion:
+		orientation_ /= orientation_.norm(); 
+		angular_momentum_ += timeStep * torque_;
+			
+		Mat4 rotMat = orientation_matrix();
+		Mat4 rotMatT = rotMat;
+		rotMatT.transpose();
+		const Mat4 inverse_inertia = rotMat * inertia_matrix() * rotMatT;
+		rotation_ = inverse_inertia * angular_momentum_;
 
+		//clean old values:
+		force_ = 0;
+		torque_ = 0;
+
+	}
+
+	Vec3 force() const
+	{
+		return force_;
+	}
+
+	void set_force(const Vec3& force)
+	{
+		force_ = force;
+	}
+
+	Vec3 torque() const
+	{
+		return torque_;
+	}
+
+	void set_torque(const Vec3& torque)
+	{
+		torque_ = torque;
+	}
+
+	void add_force(const Vec3& loc, const Vec3& force)
+	{
+		force_ += force;
+		torque_ += cross(loc, force);
+	}
 
 private:
 	Vec3 position_;
@@ -129,4 +191,7 @@ private:
 	Vec3 color_;
 	//TODO: Add other variables
 	Vec3 angular_momentum_;
+	Vec3 force_;
+	Vec3 torque_;
+
 };
