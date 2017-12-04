@@ -76,14 +76,68 @@ void RigidBodySystemSimulator::externalForcesCalculations(float timeElapsed)
 void RigidBodySystemSimulator::simulateTimestep(float timeStep)
 {
 	m_system->simulateTimeStep(timeStep);
+	if (m_currentTestCase == 1) { calculateUserInteractionForceDemo2(timeStep); }
+	if (m_currentTestCase == 3) { calculateUserInteractionForceDemo4(timeStep); }
 }
 
 void RigidBodySystemSimulator::onClick(int x, int y)
 {
+	m_trackmouse.x = x;
+	m_trackmouse.y = y;
 }
 
 void RigidBodySystemSimulator::onMouse(int x, int y)
 {
+	m_oldtrackmouse.x = x;
+	m_oldtrackmouse.y = y;
+	m_trackmouse.x = x;
+	m_trackmouse.y = y;
+}
+
+void RigidBodySystemSimulator::calculateUserInteractionForceDemo2(float timeStep)
+{
+	// Apply the mouse deltas to g_vfMovableObjectPos (move along cameras view plane)
+	Point2D mouseDiff;
+	mouseDiff.x = m_trackmouse.x - m_oldtrackmouse.x;
+	mouseDiff.y = m_trackmouse.y - m_oldtrackmouse.y;
+	if (mouseDiff.x != 0 || mouseDiff.y != 0)
+	{
+		Mat4 worldViewInv = Mat4(DUC->g_camera.GetWorldMatrix() * DUC->g_camera.GetViewMatrix());
+		worldViewInv = worldViewInv.inverse();
+		Vec3 inputView = Vec3((float)mouseDiff.x, (float)-mouseDiff.y, 0);
+		Vec3 inputWorld = worldViewInv.transformVectorNormal(inputView);
+		/*Vec3 inputScreenPos = Vec3((float)m_trackmouse.x, (float)m_trackmouse.y, 0);
+		Mat4 viewProjInv = Mat4(DUC->g_camera.GetViewMatrix() * DUC->g_camera.GetProjMatrix());
+		viewProjInv = viewProjInv.inverse();
+		Vec3 inputScreenWorldPoint =  viewProjInv.transformVectorNormal(inputScreenPos) * 0.001f;*/
+		// find a proper scale!
+		float inputScale = 0.02f;
+		inputWorld = inputWorld * inputScale;
+		m_system->applyForceOnBody(0, m_system->getPositionOfRigidBody(0) + inputWorld, inputWorld);
+	}
+}
+
+void RigidBodySystemSimulator::calculateUserInteractionForceDemo4(float timeStep)
+{
+	// Apply the mouse deltas to g_vfMovableObjectPos (move along cameras view plane)
+	Point2D mouseDiff;
+	mouseDiff.x = m_trackmouse.x - m_oldtrackmouse.x;
+	mouseDiff.y = m_trackmouse.y - m_oldtrackmouse.y;
+	if (mouseDiff.x != 0 || mouseDiff.y != 0)
+	{
+		Mat4 worldViewInv = Mat4(DUC->g_camera.GetWorldMatrix() * DUC->g_camera.GetViewMatrix());
+		worldViewInv = worldViewInv.inverse();
+		Vec3 inputView = Vec3((float)mouseDiff.x, (float)-mouseDiff.y, 0);
+		Vec3 inputWorld = worldViewInv.transformVectorNormal(inputView);
+		/*Vec3 inputScreenPos = Vec3((float)m_trackmouse.x, (float)m_trackmouse.y, 0);
+		Mat4 viewProjInv = Mat4(DUC->g_camera.GetViewMatrix() * DUC->g_camera.GetProjMatrix());
+		viewProjInv = viewProjInv.inverse();
+		Vec3 inputScreenWorldPoint =  viewProjInv.transformVectorNormal(inputScreenPos) * 0.001f;*/
+		// find a proper scale!
+		float inputScale = 0.02f;
+		inputWorld = inputWorld * inputScale;
+		m_system->applyForceOnBody(0, Vec3(0,0,0), inputWorld);
+	}
 }
 
 int RigidBodySystemSimulator::getNumberOfRigidBodies()

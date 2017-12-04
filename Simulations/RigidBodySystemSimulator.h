@@ -31,6 +31,8 @@ public:
 	void addRigidBody(Vec3 position, Vec3 size, int mass);
 	void setOrientationOf(int i,Quat orientation);
 	void setVelocityOf(int i, Vec3 velocity);
+	void calculateUserInteractionForceDemo2(float timeStep);
+	void calculateUserInteractionForceDemo4(float timeStep);
 
 private:
 	// Attributes
