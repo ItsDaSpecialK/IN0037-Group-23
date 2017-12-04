@@ -39,16 +39,32 @@ void RigidBodySystemSimulator::notifyCaseChanged(int testCase)
 	switch (testCase)
 	{
 		case 0: 
-			m_system->addRigidBody(Vec3(0, 0, 0), Vec3(1, 1, 1), 1);
+			m_system->addRigidBody(Vec3(0, 0, 0), Vec3(1, 0.6, 0.5), 2);
 			m_system->setColorOf(0, Vec3(0, 0, 0.6));
-			m_system->addRigidBody(Vec3(3, 0, 0), Vec3(2, 1, 1), 1);
-			m_system->setColorOf(1, Vec3(.6, 0, 0));
+			m_system->applyForceOnBody(0,Vec3(0.3, 0.5, 0.25),Vec3(1,1,0));
 			break;
 		case 1 :
+			m_system->addRigidBody(Vec3(0, 0, 0), Vec3(1, 0.6, 0.5), 2);
+			m_system->setColorOf(0, Vec3(0, 0, 0.6));
 			break;
 		case 2:
+			m_system->addRigidBody(Vec3(2, 0, 0), Vec3(0.6, 0.6, 0.6), 1);
+			m_system->setColorOf(0, Vec3(0, 0, 0.6));
+			m_system->addRigidBody(Vec3(-2, 0, 0), Vec3(1, 2, 2), 4);
+			m_system->setColorOf(1, Vec3(0.6, 0, 0));
+			m_system->setOrientationOf(0, Quat(Vec3(0.75,0.75,0.75), 45));
+			m_system->setVelocityOf(0, Vec3(-0.5, 0, 0));
+			m_system->setVelocityOf(1, Vec3(0.2, 0, 0));
 			break;
 		case 3 :
+			m_system->addRigidBody(Vec3(2, 0, 2), Vec3(0.6, 0.6, 0.6), 2);
+			m_system->setColorOf(0, Vec3(0, 0, 0.6));
+			m_system->addRigidBody(Vec3(-2, 0, 2), Vec3(0.6, 0.6, 0.6), 2);
+			m_system->setColorOf(1, Vec3(0.6, 0, 0));
+			m_system->addRigidBody(Vec3(2, 0, -2), Vec3(0.6, 0.6, 0.6), 2);
+			m_system->setColorOf(2, Vec3(0, 0.6, 0));
+			m_system->addRigidBody(Vec3(-2, 0, -2), Vec3(0.6, 0.6, 0.6), 2);
+			m_system->setColorOf(3, Vec3(0.6, 0.6, 0.6));
 			break;
 	}
 }

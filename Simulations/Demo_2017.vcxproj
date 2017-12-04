@@ -242,6 +242,7 @@
     <ClCompile Include="util\util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="collisionDetect.h" />
     <ClInclude Include="Demo1.h" />
     <ClInclude Include="Demo2.h" />
     <ClInclude Include="Demo3.h" />
