@@ -137,16 +137,16 @@ public:
 	{
 		position_ = position_ + timeStep * velocity_;
 		velocity_ = velocity_ + timeStep * (force_ / mass_);
-		Quat quat(rotation_, 0);
+		Quat quat(rotation_.x, rotation_.y, rotation_.z, 0);
 		orientation_ = orientation_ + timeStep / 2 * quat * orientation_;
 		//Normalize the quaternion:
-		orientation_ /= orientation_.norm(); 
+		orientation_ /= orientation_.norm();	
 		angular_momentum_ += timeStep * torque_;
 			
 		Mat4 rotMat = orientation_matrix();
 		Mat4 rotMatT = rotMat;
 		rotMatT.transpose();
-		const Mat4 inverse_inertia = rotMat * inertia_matrix() * rotMatT;
+		const Mat4 inverse_inertia = rotMatT * inverse_inertia_matrix() * rotMat;
 		rotation_ = inverse_inertia * angular_momentum_;
 
 		//clean old values:
