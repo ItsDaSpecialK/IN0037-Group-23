@@ -232,10 +232,13 @@
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="MassSpringSystemSimulator.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="RigidBodySystem.cpp" />
     <ClCompile Include="Spring.cpp" />
     <ClCompile Include="TemplateSimulator.cpp" />
     <ClCompile Include="TwoPointsDemoScene.cpp" />
     <ClCompile Include="util\FFmpeg.cpp" />
+    <ClCompile Include="util\RigidBodySystemSimulator.cpp" />
     <ClCompile Include="util\util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +251,9 @@
     <ClInclude Include="DrawingUtilitiesClass.h" />
     <ClInclude Include="MassSpringSystemSimulator.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="RigidBodySystem.h" />
+    <ClInclude Include="RigidBodySystemSimulator.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="Spring.h" />
     <ClInclude Include="TemplateSimulator.h" />
