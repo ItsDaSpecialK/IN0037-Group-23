@@ -7,7 +7,7 @@ RigidBodySystemSimulator::RigidBodySystemSimulator()
 
 const char * RigidBodySystemSimulator::getTestCasesStr()
 {
-	return "Demo 1, Demo 2, Demo 3, Demo 4";;
+	return "Demo 1, Demo 2, Demo 3, Demo 4, Unit Test Case";
 }
 
 void RigidBodySystemSimulator::initUI(DrawingUtilitiesClass * DUC)
@@ -65,6 +65,14 @@ void RigidBodySystemSimulator::notifyCaseChanged(int testCase)
 			m_system->setColorOf(2, Vec3(0, 0.6, 0));
 			m_system->addRigidBody(Vec3(-2, 0, -2), Vec3(0.6, 0.6, 0.6), 2);
 			m_system->setColorOf(3, Vec3(0.6, 0.6, 0.6));
+			break;
+		case 4:
+			m_system->addRigidBody(Vec3(-0.1f, -0.2f, 0.1f), Vec3(0.4f, 0.2f, 0.2f), 100.0f);
+			m_system->addRigidBody(Vec3(0.0f, 0.2f, 0.0f), Vec3(0.4f, 0.2f, 0.2f), 100.0);
+			m_system->setOrientationOf(1, Quat(Vec3(0.0f, 0.0f, 1.0f), (float)(M_PI)*0.25f));
+			m_system->setVelocityOf(1, Vec3(0.0f, -0.1f, 0.05f));
+			m_system->setColorOf(0, Vec3(0, 0, 0.6));
+			m_system->setColorOf(1, Vec3(0, 0, 0.6));
 			break;
 	}
 }

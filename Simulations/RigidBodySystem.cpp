@@ -51,7 +51,7 @@ bool RigidBodySystem::compute_collision(RigidBody* a, RigidBody* b)
 {
 	Mat4 obj_world_a = a->object_to_world_matrix();
 	Mat4 obj_world_b = b->object_to_world_matrix();
-	CollisionInfo info = checkCollisionSAT(obj_world_a, obj_world_b);
+	CollisionInfo info = checkCollisionSAT(obj_world_b, obj_world_a);
 	if (!info.isValid) return false;
 	Vec3 xa = a->transform_world_to_loc(info.collisionPointWorld);
 	Vec3 xb = b->transform_world_to_loc(info.collisionPointWorld);
@@ -60,7 +60,7 @@ bool RigidBodySystem::compute_collision(RigidBody* a, RigidBody* b)
 	Vec3 v_rel = va - vb;
 	Vec3 n = info.normalWorld;
 	float v_rel_proj = dot(n, v_rel);
-	if (v_rel_proj > 0) return false; //separating, OK.
+	//if (v_rel_proj > 0) return false; //separating, OK.
 	//Compute the impulse:
 	float c = (a->restitution_coef() + b->restitution_coef())/2;
 	float numerator = - (1 + c) * v_rel_proj;
