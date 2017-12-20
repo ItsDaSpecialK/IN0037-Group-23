@@ -60,7 +60,7 @@ bool RigidBodySystem::compute_collision(RigidBody* a, RigidBody* b)
 	Vec3 v_rel = va - vb;
 	Vec3 n = info.normalWorld;
 	float v_rel_proj = dot(n, v_rel);
-	if (v_rel_proj >= 0) return true; //separating or sliding, OK.
+	if (v_rel_proj > 0) return false; //separating, OK.
 	//Compute the impulse:
 	float c = (a->restitution_coef() + b->restitution_coef())/2;
 	float numerator = - (1 + c) * v_rel_proj;
