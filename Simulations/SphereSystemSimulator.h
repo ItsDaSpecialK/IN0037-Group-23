@@ -1,6 +1,7 @@
 #ifndef SPHSYSTEMSIMULATOR_h
 #define SPHSYSTEMSIMULATOR_h
 #include "Simulator.h"
+#include "SphereSystem.h"
 //#include "spheresystem.h", add your sphere system header file
 
 #define NAIVEACC 0
@@ -20,7 +21,7 @@ public:
 	void simulateTimestep(float timeStep);
 	void onClick(int x, int y);
 	void onMouse(int x, int y);
-	
+
 protected:
 	// Attributes
 	Vec3 externalForce;
@@ -39,12 +40,13 @@ protected:
 	
 	int   m_iAccelerator; // switch between NAIVEACC and GRIDACC, (optionally, KDTREEACC, 2)
 	
-	//SphereSystem * m_pSphereSystem; // add your own sphere system member!
+	SphereSystem * m_pSphereSystem; // add your own sphere system member!
+
 	// for Demo 3 only:
 	// you will need multiple SphereSystem objects to do comparisons in Demo 3
 	// m_iAccelerator should be ignored.
-	// SphereSystem * m_pSphereSystemGrid; 
+	SphereSystem * m_pSphereSystemGrid; 
 
 };
-
+void runDemo3Performance();
 #endif
