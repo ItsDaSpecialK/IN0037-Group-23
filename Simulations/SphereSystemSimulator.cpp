@@ -61,7 +61,7 @@ void SphereSystemSimulator::notifyCaseChanged(int testCase)
 		//TODO: Add spheres into the system...
 		m_iAccelerator = NAIVEACC;
 		m_pSphereSystem->addSphere(Vec3(0, 0, 0), Vec3(0, 0, 0), false, m_fMass);
-		m_pSphereSystem->addSphere(Vec3(0, 1, 0), Vec3(0, 0, 0), false, m_fMass);
+		m_pSphereSystem->addSphere(Vec3(.5, 1, 0), Vec3(0, 0, 0), false, m_fMass);
 		break;
 	case 1:
 		//TODO: Add spheres into the system...
