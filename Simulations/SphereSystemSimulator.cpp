@@ -13,9 +13,9 @@ std::function<float(float)> SphereSystemSimulator::m_Kernels[5] = {
 
 // SphereSystemSimulator member functions
 SphereSystemSimulator::SphereSystemSimulator(): m_fMass(1), m_fRadius(.5), m_fForceScaling(1), m_fDamping(0),
-                                                m_iNumSpheres(0), m_iKernel(0), m_currentTestCase(0),
+                                                m_iNumSpheres(0), m_CellsPerSide(10), m_iKernel(0), m_currentTestCase(0),
                                                 m_iAccelerator(NAIVEACC), m_pSphereSystem(nullptr),
-                                                m_pSphereSystemGrid(nullptr),m_gravityScale(1)
+                                                m_pSphereSystemGrid(nullptr), m_gravityScale(1)
 {
 }
 
@@ -58,7 +58,7 @@ void SphereSystemSimulator::notifyCaseChanged(int testCase)
 	switch (testCase)
 	{
 	case 0:
-		m_pSphereSystem = new SphereSystemNaive(m_fRadius, m_fMass);
+		m_pSphereSystem = new SphereSystemNaive(m_fRadius, m_fMass, BOX_DIMENSION);
 		//TODO: Add spheres into the system...
 		m_iAccelerator = NAIVEACC;
 		m_pSphereSystem->addSphere(Vec3(0, 0, 0), Vec3(0, 0, 0), false, m_fMass);
@@ -66,12 +66,12 @@ void SphereSystemSimulator::notifyCaseChanged(int testCase)
 		break;
 	case 1:
 		//TODO: Add spheres into the system...
-		m_pSphereSystem = new SphereSystemGrid(m_fRadius, m_fMass);
+		m_pSphereSystem = new SphereSystemGrid(m_fRadius, m_fMass, BOX_DIMENSION, m_CellsPerSide);
 		m_iAccelerator = GRIDACC;
 		break;
 	case 2:
-		m_pSphereSystem = new SphereSystemNaive(m_fRadius, m_fMass);
-		m_pSphereSystemGrid = new SphereSystemGrid(m_fRadius, m_fMass);
+		m_pSphereSystem = new SphereSystemNaive(m_fRadius, m_fMass, BOX_DIMENSION);
+		m_pSphereSystemGrid = new SphereSystemGrid(m_fRadius, m_fMass, BOX_DIMENSION, m_CellsPerSide);
 		m_pSphereSystemGrid->set_color(0.6*Vec3(1, 0, 0));
 		m_iAccelerator = NAIVEACC; // for the first system..
 		//TODO: Add spheres to both systems...
@@ -111,8 +111,9 @@ void runDemo3Performance()
 	std::cout << "Performance tests: " << std::endl;
 	float radius = .5;
 	float mass = 1;
-	SphereSystemNaive naiveSystem(radius, mass);
-	SphereSystemGrid gridSystem(radius, mass);
+	int cellsPerSide = 10;
+	SphereSystemNaive naiveSystem(radius, mass, BOX_DIMENSION);
+	SphereSystemGrid gridSystem(radius, mass, BOX_DIMENSION, cellsPerSide);
 	MuTime timer;
 	timer.get();
 	std::cout << "Time passed " << timer.update().time << " milliseconds\n" << std::endl;

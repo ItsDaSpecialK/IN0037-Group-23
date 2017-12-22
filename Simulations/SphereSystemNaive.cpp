@@ -15,8 +15,8 @@ void SphereSystemNaive::computeCollisionForces()
 			{
 				p2ToP1 = p2ToP1 / dist;
 				float force_magnitude = kernelFunc_(dist);
-				point.force += p2ToP1* force_magnitude;
-				point2.force += -p2ToP1 * force_magnitude;
+				point.force += p2ToP1* force_magnitude * FORCE_LAMBDA;
+				point2.force += -p2ToP1 * force_magnitude * FORCE_LAMBDA;
 			}
 		}
 	}
@@ -37,8 +37,8 @@ void SphereSystemNaive::computeCollisionForcesTmp()
 			{
 				p2ToP1 = p2ToP1 / dist;
 				float force_magnitude  = kernelFunc_(dist);
-				point.force += p2ToP1* force_magnitude;
-				point2.force += -p2ToP1 * force_magnitude;
+				point.force += p2ToP1* force_magnitude * FORCE_LAMBDA;
+				point2.force += -p2ToP1 * force_magnitude * FORCE_LAMBDA;
 			}
 		}
 	}

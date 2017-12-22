@@ -6,6 +6,7 @@
 
 #define NAIVEACC 0
 #define GRIDACC 1
+#define BOX_DIMENSION 2.f
 
 class SphereSystemSimulator:public Simulator{
 public:
@@ -33,6 +34,7 @@ protected:
 	float m_fForceScaling;
 	float m_fDamping;
 	int   m_iNumSpheres;
+	int m_CellsPerSide;
 	
 	int   m_iKernel; // index of the m_Kernels[5], more detials in SphereSystemSimulator.cpp
 	int m_currentTestCase;

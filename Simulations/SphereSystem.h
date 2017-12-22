@@ -11,11 +11,11 @@ public:
 	
 	virtual ~SphereSystem() = default;
 
-	SphereSystem(float radius, float mass)
+	SphereSystem(float radius, float mass, float box_dimension)
 		: radius_(radius), mass_(mass),
 		  color_(0.6*Vec3(0, 1, 0)), 
 		  gravity_(Vec3(0,-1,0)), gravityScale_(1),
-		  kernelFunc_(nullptr)
+		  kernelFunc_(nullptr), box_dimension_(box_dimension)
 	{
 	}
 
@@ -57,6 +57,8 @@ protected:
 	std::vector<Point> spheres;
 	float radius_;
 	std::function<float(float)> kernelFunc_;
+	float box_dimension_;
+	const double FORCE_LAMBDA = 1000;
 private:
 	float mass_;
 	Vec3 color_;

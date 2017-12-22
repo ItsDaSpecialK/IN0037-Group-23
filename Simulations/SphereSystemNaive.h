@@ -4,9 +4,9 @@
 class SphereSystemNaive: public SphereSystem
 {
 public:
-	SphereSystemNaive(float radius, float mass)
-		: SphereSystem(radius, mass)
-	{
+	SphereSystemNaive(float radius, float mass, float box_size)
+		: SphereSystem(radius, mass, box_size)
+	{	
 	}
 
 	void computeCollisionForces() override;
