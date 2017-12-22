@@ -45,6 +45,7 @@ void SphereSystemSimulator::drawFrame(ID3D11DeviceContext* pd3dImmediateContext)
 	m_pSphereSystem->drawFrame(DUC, pd3dImmediateContext);
 	if (m_pSphereSystemGrid != nullptr)
 	{
+		//TODO: Draw the grid
 		m_pSphereSystemGrid->drawFrame(DUC, pd3dImmediateContext);
 		
 	}
